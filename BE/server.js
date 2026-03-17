@@ -6,12 +6,18 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import errorHandler from './middleware/errorHandler.js';
+import connectDB from './config/db.js';
 
+import authRoutes from './routes/authRoutes.js'
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 
 const app = express();
+
+connectDB();
+
+
 app.use(cors({
     origin:"*",
     methods:["GET","POST","PUT","DELETE"],
@@ -23,6 +29,9 @@ app.use(express.urlencoded({ extended: true }   ));
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads"))); 
 
+app.use("/api/auth", authRoutes);
+
+
 app.use(errorHandler);
 
 app.use((req, res) => {
@@ -30,7 +39,6 @@ app.use((req, res) => {
 
 });
 
-connectDB();
 
 const PORT = process.env.PORT || 5000;
 
