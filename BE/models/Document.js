@@ -36,8 +36,18 @@ const documentSchema = new mongoose.Schema({
     },
 status:{
     type:String,
+    enum:['processing','ready','failed'],
+    default:'processing'
     
 }
 
 
-})
+},{timestamps:true})
+
+
+documentSchema.index({userId:1, uploadDate:-1})
+
+const Document = mongoose.model("Document", documentSchema)
+
+
+export default Document
