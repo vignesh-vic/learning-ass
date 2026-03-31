@@ -1,9 +1,8 @@
 
 import express from 'express'
 import { body } from 'express-validator'
-import {login,register,getProfile, updateProfile, changePassword} from '../controllers/authController'
+import {login,register,getProfile, updateProfile, changePassword} from '../controllers/authController.js'
 import protect from "../middleware/auth.js"
-import { body } from 'express-validator'
 
 const router = express.Router()
 
@@ -30,6 +29,10 @@ const loginValidation = [
 router.post("/register", registerValidation, register);
 router.post("/login", loginValidation, login);
 
-router.get("/profile", protect, getProfile);
-router.put("/profile", protect, updateProfile);
-router.put("/change-password", protect, changePassword);
+// router.get("/profile", protect, getProfile);
+// router.put("/profile", protect, updateProfile);
+// router.put("/change-password", protect, changePassword);
+
+
+
+export default router
