@@ -1,7 +1,7 @@
 import User  from '../models/User.js'
-
+import jwt from 'jsonwebtoken'
 function generateToken(id) {
-    const secretKey = process.env.JWT_SECRET_KEY;
+    const secretKey = process.env.JWT_SECRET;
     if (!secretKey) {
         throw new Error('JWT secret key is not defined in environment variables');
     }
@@ -65,9 +65,68 @@ export const register = async (req, res, next) => {
 
 }
 
-export const login = (req, res, next) => {
+export const login = async(req, res, next) => {
 
     try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Please provide both email and password' });
+        }
+
+        const user = await User.findOne({ email }).select('+password');
+
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+        const isMatch = await user.matchPassword(password);
+
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+         
+        const token = generateToken(user._id);
+
+        res.status(200).json({
+            success: true,
+            user: {
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                profileImage: user.profileImage,
+                createdAt: user.createdAt,
+                
+            },
+            token,
+            message: 'User logged in successfully'
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+
+}
+
+
+export const getProfile = async (req, res, next) => {
+
+    try {
+
+        const user = await User.findById(req.user._id);
+
+
+        res.status(200).json({
+            success: true,
+            user: {
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                profileImage: user.profileImage,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt,
+            }
+        });
 
 
 
@@ -79,32 +138,67 @@ export const login = (req, res, next) => {
 }
 
 
-export const getProfile = (req, res, next) => {
+export const updateProfile = async (req, res, next) => {
 
     try {
 
+        const { username, email, profileImage } = req.body;
 
+        const user = await User.findById(req.user._id);
+        if (username) user.username = username;
+        if (email) user.email = email;
+        if (profileImage) user.profileImage = profileImage;
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            data: {
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                profileImage: user.profileImage,
+             
+            },
+            message: 'Profile updated successfully'
+        });
 
     } catch (error) {
         next(error)
-
-    }
-
-}
-
-
-export const updateProfile = (req, res, next) => {
-
-    try {
-    } catch (error) {
-        next(error)
     }
 }
 
 
-export const changePassword = (req, res, next) => {
+export const changePassword = async(req, res, next) => {
+
 
     try {
+    
+        const { currentPassword, newPassword } = req.body;
+
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({ message: 'Please provide both current and new passwords' });
+        }
+
+        const user = await User.findById(req.user._id).select('+password');
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const isMatch = await user.matchPassword(currentPassword);
+
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Current password is incorrect' });
+        }
+
+        user.password = newPassword;
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Password updated successfully'
+        });
+
     } catch (error) {
         next(error)
     }
