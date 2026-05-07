@@ -10,6 +10,9 @@ const documentSchema = new mongoose.Schema({
     fileSize:{
         type:Number
     },
+    filePath:{
+        type: String
+    },
     extractedText:{
         type:String
     },
