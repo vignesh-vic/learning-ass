@@ -4,14 +4,46 @@ import Quiz from '../models/Quiz.js'
 import ChatHistory from '../models/ChatHistory.js'
 import * as geminiService from '../utils/geminiService.js'
         
-import findRelevantChunks from '../utils/textChunker.js'
 
 
 
 const generateFlashcards = async (req, res, next) => {
     try {
         
-        
+        const { documentId, count=10 } = req.body
+
+        if (!documentId) {
+            return res.status(400).json({ message: "Document ID is required" })
+        }
+
+
+        const document = await Document.findOne({
+            _id: documentId,
+            userId: req.user._id,
+            status: 'ready'
+
+        })
+
+        if (!document) {
+            return res.status(404).json({success: false, message: "Document not found or not ready", status:404 })
+        }
+
+        const cards = await geminiService.generateFlashcards(document.extractedText, parseInt(count))
+
+        const flashcardSet= await FlasCard.create({
+
+                userId: req.user._id,
+                documentId: document._id,
+                cards: cards.map(card => ({
+                    question: card.question,
+                    answer: card.answer,
+                    difficulty: card.difficulty,
+                    reviewCount: 0,
+                    isStarred: false,
+                }))
+            })
+
+        res.status(201).json({ success: true, flashcardSet, message: "Flashcards generated successfully" })
 
     } catch (error) {
         next(error);

@@ -3,10 +3,13 @@ import Flashcard from '../models/FlashCard.js'
 export const getAllFlashcard = async (req, res, next) => {
     try {
         const flashcards = await Flashcard.find({
-            userId:req.user_id,
+            userId:req.user._id,
             documentId:req.params.documentId
 
-        }).populate('documentId','title fileName');
+        }).populate('documentId','title fileName')
+          .sort({createdAt:-1})
+        
+
         res.status(200).json({
             success:true,
             count: flashcards.length,
@@ -21,7 +24,7 @@ export const getAllFlashcard = async (req, res, next) => {
 export const getFlashcardsSets = async (req, res, next) => {
     try {
         const flashcardSets = await Flashcard.find({
-            userId:req.user_id,
+            userId:req.user._id,
 
         }).populate('documentId','title fileName');
 
