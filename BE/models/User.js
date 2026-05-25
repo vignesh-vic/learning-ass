@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import bycrpt from 'bcryptjs'
+import bcrypt from 'bcryptjs';
 
  const userSchema = new mongoose.Schema({
     name: {
@@ -31,16 +31,15 @@ import bycrpt from 'bcryptjs'
 
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) {
-        return next();
-    }   
-    const salt = await bycrpt.genSalt(10);
-    this.password = await bycrpt.hash(this.password, salt);
-    next();
+        return 
+    }
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);  // ✅ Fix 2: Added missing `await`
 })
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
-    return await bycrpt.compare(enteredPassword, this.password);
-}   
+    return await bcrypt.compare(enteredPassword, this.password);
+}
 
 const User = mongoose.model('User', userSchema);
 

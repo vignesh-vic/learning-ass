@@ -9,6 +9,12 @@ import errorHandler from './middleware/errorHandler.js';
 import connectDB from './config/db.js';
 
 import authRoutes from './routes/authRoutes.js'
+import documentRoutes from './routes/documentRoutes.js'
+import flashcardRoutes from './routes/flashcardRoutes.js'
+import aiRoutes from './routes/aiRoutes.js'
+
+
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -30,9 +36,12 @@ app.use(express.urlencoded({ extended: true }   ));
 app.use("/uploads", express.static(path.join(__dirname, "uploads"))); 
 
 app.use("/api/auth", authRoutes);
-
-
+app.use("/api/documents", documentRoutes);
+app.use("/api/flashcards", flashcardRoutes);
+app.use("/api/ai", aiRoutes);
 app.use(errorHandler);
+
+
 
 app.use((req, res) => {
     res.status(404).json({ message: "Route not found" });
