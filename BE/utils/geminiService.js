@@ -192,7 +192,7 @@ ${text.substring(0, 15000)}
                 questions.push({
                     question,
                     options,
-                    correctOption,
+                    correctAnswer: Number(correctOption),
                     explanation,
                     difficulty,
                 })

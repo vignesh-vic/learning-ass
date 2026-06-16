@@ -47,7 +47,7 @@ export const reviewFlahcard = async (req, res) => {
         const flashcardSet = await Flashcard.findOne({ 
 
             'cards._id': req.params.cardId,
-             userId:req.user_id
+             userId:req.user._id
 
          });
 
@@ -55,7 +55,7 @@ export const reviewFlahcard = async (req, res) => {
             return res.status(404).json({ status:false, message: 'Flashcard not found' });
         }
 
-        const cardIndex = flashcardSet.findIndex((c) => c._id.toString() === req.params.cardId);
+        const cardIndex = flashcardSet?.cards?.findIndex((c) => c._id.toString() === req.params.cardId);
 
         if (cardIndex === -1) {
             return res.status(404).json({ status:false, message: 'Card not found' });
@@ -76,7 +76,9 @@ export const reviewFlahcard = async (req, res) => {
 export  const toggleStartFlashcard = async (req, res) => {
     try {
         const { cardId } = req.params;  
-        const flashcard = await Flashcard.findOne({ 'cards._id': cardId, userId: req.user_id });
+        console.log(cardId);
+
+        const flashcard = await Flashcard.findOne({ 'cards._id': cardId, userId: req.user._id });
         if (!flashcard) {
             return res.status(404).json({ status:false, message: 'Flashcard not found' });
         }   
@@ -99,7 +101,7 @@ export  const toggleStartFlashcard = async (req, res) => {
 export const deleteFlashcardSet = async (req, res) => {
     try {
         const { id } = req.params;  
-        const flashcardSet = await Flashcard.findById({_id:id, userId:req.user_id});
+        const flashcardSet = await Flashcard.findById({_id:id, userId:req.user._id});
         if (!flashcardSet) {
             return res.status(404).json({ success: false, message: 'Flashcard set not found' });
         }   
