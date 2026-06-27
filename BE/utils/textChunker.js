@@ -153,7 +153,7 @@ export const findRelevantChunks = (chunks, query, maxChunk = 3) => {
 
     }
 
-    const scoredChunks = chunks.map((chunk) => {
+    const scoredChunks = chunks.map((chunk,index) => {
 
         const content = chunk.content.toLowerCase()
      
@@ -163,11 +163,11 @@ export const findRelevantChunks = (chunks, query, maxChunk = 3) => {
 
         for (const word of queryWords) {
 
-            const exactMatches = content.match(new RegExp(`\\b${word}\\b`, 'g') || []).length
+            const exactMatches = (content.match(new RegExp(`\\b${word}\\b`, 'g')) || []).length
             score += exactMatches * 3
 
 
-            const  partialMatches = content.match(new RegExp(word, 'g') || []).length
+            const  partialMatches = (content.match(new RegExp(word, 'g')) || []).length
             score += Math.max(0, partialMatches - exactMatches) * 1.5
 
         }
@@ -188,7 +188,7 @@ export const findRelevantChunks = (chunks, query, maxChunk = 3) => {
           _id: chunk._id,
           score: score * normalizedScore,
           rawScore: score,
-          matchWords: uniqueWordsFound
+            matchWords: uniqueQueryFound
         }
     })
 

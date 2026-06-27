@@ -17,8 +17,8 @@ const quizSchema = new mongoose.Schema({
         trim: true
     },
     questions: [{
-        question: { type: String, required: true, validate: [arr => arr.length === 4, 'Must have exactly 4 options'] },
-        options: [{ type: String, required: true }],
+        question: { type: String, required: true,  },
+        options: { type: [String], required: true, validate: [array => array .length === 4, 'Must have exactly 4 options'] },
         correctAnswer: { type: String, required: true },
         explanation: { type: String, default: '' },
         difficulty: { type: String, enum: ['easy', 'medium', 'hard'], default: 'medium' }
@@ -29,7 +29,7 @@ const quizSchema = new mongoose.Schema({
         isCorrect: { type: Boolean, required: true },
         answeredAt: { type: Date, default: Date.now }
     }],
-    scope: { type: Number, required: true },
+    scope: { type: Number, default: 0 },
     totalQuestions: { type: Number, required: true },
     completedAt: { type: Date, default: null }
 

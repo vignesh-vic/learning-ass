@@ -36,8 +36,7 @@ ${text.substring(0, 15000)}
     try {
 
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash-lite',
-            contents: prompt,
+            model: "gemini-2.5-flash",            contents: prompt,
         })
 
         const generatedText = response.text || ''
@@ -147,7 +146,7 @@ ${text.substring(0, 15000)}
 
             let question = ''
             let options = []
-            let correctOption = ''
+            let correctAnswer = ''
             let explanation = ''
             let difficulty = 'medium'
 
@@ -164,7 +163,7 @@ ${text.substring(0, 15000)}
                 }
 
                 else if (trimmed.startsWith('C:')) {
-                    correctOption = trimmed.substring(2).trim()
+                    correctAnswer = trimmed.substring(2).trim()
                 }
 
                 else if (trimmed.startsWith('E:')) {
@@ -187,12 +186,12 @@ ${text.substring(0, 15000)}
             if (
                 question &&
                 options.length === 4 &&
-                correctOption
+                correctAnswer
             ) {
                 questions.push({
                     question,
                     options,
-                    correctOption,
+                    correctAnswer,
                     explanation,
                     difficulty,
                 })
@@ -251,7 +250,7 @@ ${text.substring(0, 20000)}
 export const chatWithContext = async (question, chunks) => {
 
     const context = chunks
-        .map((chunk, index) => `Chunk ${index + 1}: ${chunk}`)
+        .map((chunk, index) => `Chunk ${index + 1}:\n${chunk.content}`)
         .join('\n\n')
 
     const prompt = `
