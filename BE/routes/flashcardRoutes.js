@@ -9,7 +9,7 @@ router.use(protect)
 router.get('/', getFlashcardsSets)
 router.get('/:documentId', getAllFlashcard)
 router.post('/:cardId/review',reviewFlahcard)
-router.post('/:carId/star', toggleStartFlashcard)
+router.put('/:cardId/star', toggleStartFlashcard)
 router.delete('/:id', deleteFlashcardSet)
  
 
