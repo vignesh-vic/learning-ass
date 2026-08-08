@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login , userdata} from './slices/authSlice';
 import { use, useEffect } from 'react';
 import LoginPage from './pages/Auth/LoginPage';
+import DashboradPage from './pages/dashboard/DashboradPage';
+import RegisterPage from './pages/Auth/RegisterPage';
+import AppLayout from './components/layout/AppLayout';
 
 function App() {
 const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -42,8 +45,9 @@ return (
         <Route path="/" 
         element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login"  replace/>} />
         <Route path="/home" element={<h1>Home Page</h1>} />
-        <Route path="/dashboard" element={isAuthenticated ? <h1>Dashboard</h1> : <Navigate to="/login" />} />
+      <Route path="/dashboard" element={isAuthenticated ? <AppLayout><DashboradPage /></AppLayout> : <Navigate to="/login" />} />
         <Route path="/login" element={<LoginPage />} />
+      <Route path="/Register" element={<RegisterPage />} />
       </Routes>
     </Router>
   )

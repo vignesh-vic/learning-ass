@@ -5,7 +5,7 @@ const getDashboardData = async (documentId) => {
 
     try {
 
-        const response = await axiosInstance.get(API_PATHS.PROGRESS.GET_DASHBOARD_DATA);
+        const response = await axiosInstance.get(API_PATHS.PROGRESS.GET_DASHBOARD);
         return response.data;
 
     } catch (error) {

@@ -19,9 +19,9 @@ export const register = async (req, res, next) => {
 
     try {
 
-        const { email, password, name } = req.body;
+        const { email, password, username } = req.body;
 
-        if (!email || !password || !name) {
+        if (!email || !password || !username) {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
@@ -33,7 +33,7 @@ export const register = async (req, res, next) => {
         }
 
         const user = await User.create({
-            name,
+            name:username,
             email,
             password
         });
