@@ -7,10 +7,14 @@ import LoginPage from './pages/Auth/LoginPage';
 import DashboradPage from './pages/dashboard/DashboradPage';
 import RegisterPage from './pages/Auth/RegisterPage';
 import AppLayout from './components/layout/AppLayout';
+import DocumentDetailPage from './pages/documents/documentDeatilPage';
+import DocumentListPage from './pages/documents/documentListPage';
 
 function App() {
 const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-const loading = useSelector((state) => state.auth.loading);
+const loading = useSelector((state) => state.auth.loading); 
+
+console.log('isAuthenticated:', isAuthenticated);
 
 const dispatch = useDispatch();
 
@@ -46,8 +50,21 @@ return (
         element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login"  replace/>} />
         <Route path="/home" element={<h1>Home Page</h1>} />
       <Route path="/dashboard" element={isAuthenticated ? <AppLayout><DashboradPage /></AppLayout> : <Navigate to="/login" />} />
+      <Route
+        path="/documents/:id"
+        element={
+          isAuthenticated ? (
+            <AppLayout>
+              <DocumentDetailPage />
+            </AppLayout>
+          ) : (
+            <Navigate to="/login" />
+          ) 
+        }
+      />
         <Route path="/login" element={<LoginPage />} />
       <Route path="/Register" element={<RegisterPage />} />
+      <Route path="/documents" element={<DocumentListPage />} />
       </Routes>
     </Router>
   )
