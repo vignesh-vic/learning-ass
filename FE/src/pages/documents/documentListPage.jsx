@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Plus, Upload, Trash2, FileText, X } from 'lucide-react'
 import toast from 'react-hot-toast'
-
+import Button from '../../components/common/Button'
 
 import documentService from '../../services/documentService'
 import Spinner from '../../components/common/Spinner'
@@ -80,7 +80,7 @@ const DocumentListPage = () => {
             setUploadFile(null)
             setUploadTitle('')
             setLoading(true)
-            fetchDocuments() 
+            fetchDocuments()
         } catch (error) {
             toast.error('Failed to upload document.')
         }
@@ -121,7 +121,7 @@ const DocumentListPage = () => {
             setIsDeleteModelOpen(false)
             setSelectedDoc(null)
             setDocuments(documents.filter(doc => doc.id !== selectedDoc.id))
-            
+
         } catch (error) {
             toast.error('Failed to delete document.')
         }
@@ -131,13 +131,45 @@ const DocumentListPage = () => {
     }
 
     const renderContent = () => {
-       return <div>renderContent</div>
+        return <div>renderContent</div>
     }
 
-    
+
     return (
-        <div>
-            DocumentListPage
+        <div className='min-h-screen'>
+
+            <div className='absolute inset-0 bg-[radial-gradient(#e5e7eb_1px, transparent_1px)] bg-size-[16px_16px] opacity-30 pointer-events-none'></div>
+
+
+            <div className='relative '>
+                <div>
+                    <div>
+                        <h1>
+                            My Documents
+                        </h1>
+
+                        <p>
+                            Manage and organize your learning  materials in one place.
+                        </p>
+                    </div>
+                    {
+                        documents.length > 0 && (
+
+                            <Button onClick={() => setIsUploadModelOpen(true)} >
+
+                                <Plus className='mr-2 h-4 w-4' strokeWidth={2.5} />
+                                Upload Document
+                            </Button>
+                        )
+
+
+                    }
+                </div>
+                {renderContent()}
+
+
+            </div>
+
 
         </div>
     )
