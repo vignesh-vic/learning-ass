@@ -5,7 +5,7 @@ import Button from '../../components/common/Button'
 
 import documentService from '../../services/documentService'
 import Spinner from '../../components/common/Spinner'
-
+import DocumentCard from './DocumentCard'
 
 
 
@@ -131,7 +131,28 @@ const DocumentListPage = () => {
     }
 
     const renderContent = () => {
-        return <div>renderContent</div>
+
+        if( loading) {
+            return (
+                <div>
+                    <Spinner />
+                </div>
+            )
+        }
+
+        if (documents.length > 0) {
+            return (
+                <div className=''>
+                    <div className=''>
+                        <div className=''>
+                            <FileText className='h-6 w-6 text-gray-400' strokeWidth={1.5} />
+
+                        </div>
+                    </div>     
+                </div>
+            )
+        }
+
     }
 
 
@@ -141,14 +162,14 @@ const DocumentListPage = () => {
             <div className='absolute inset-0 bg-[radial-gradient(#e5e7eb_1px, transparent_1px)] bg-size-[16px_16px] opacity-30 pointer-events-none'></div>
 
 
-            <div className='relative '>
-                <div>
+            <div className='relative  max-w-7xl  mx-auto'>
+                <div className='flex  items-center justify-between mb-10'>
                     <div>
-                        <h1>
+                        <h1 className='text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
                             My Documents
                         </h1>
 
-                        <p>
+                        <p className='mt-2 text-sm text-gray-700'>
                             Manage and organize your learning  materials in one place.
                         </p>
                     </div>

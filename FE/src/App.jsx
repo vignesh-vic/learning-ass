@@ -64,7 +64,7 @@ return (
       />
         <Route path="/login" element={<LoginPage />} />
       <Route path="/Register" element={<RegisterPage />} />
-      <Route path="/documents" element={<DocumentListPage />} />
+      <Route path="/documents" element={isAuthenticated ? <AppLayout><DocumentListPage /></AppLayout> : <Navigate to="/login" />} />
       </Routes>
     </Router>
   )
