@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Plus, Upload, Trash2, FileText, X } from 'lucide-react'
 import toast from 'react-hot-toast'
-
+import Button from '../../components/common/Button'
 
 import documentService from '../../services/documentService'
 import Spinner from '../../components/common/Spinner'
-
+import DocumentCard from './DocumentCard'
 
 
 
@@ -80,7 +80,7 @@ const DocumentListPage = () => {
             setUploadFile(null)
             setUploadTitle('')
             setLoading(true)
-            fetchDocuments() 
+            fetchDocuments()
         } catch (error) {
             toast.error('Failed to upload document.')
         }
@@ -121,7 +121,7 @@ const DocumentListPage = () => {
             setIsDeleteModelOpen(false)
             setSelectedDoc(null)
             setDocuments(documents.filter(doc => doc.id !== selectedDoc.id))
-            
+
         } catch (error) {
             toast.error('Failed to delete document.')
         }
@@ -131,13 +131,66 @@ const DocumentListPage = () => {
     }
 
     const renderContent = () => {
-       return <div>renderContent</div>
+
+        if( loading) {
+            return (
+                <div>
+                    <Spinner />
+                </div>
+            )
+        }
+
+        if (documents.length > 0) {
+            return (
+                <div className=''>
+                    <div className=''>
+                        <div className=''>
+                            <FileText className='h-6 w-6 text-gray-400' strokeWidth={1.5} />
+
+                        </div>
+                    </div>     
+                </div>
+            )
+        }
+
     }
 
-    
+
     return (
-        <div>
-            DocumentListPage
+        <div className='min-h-screen'>
+
+            <div className='absolute inset-0 bg-[radial-gradient(#e5e7eb_1px, transparent_1px)] bg-size-[16px_16px] opacity-30 pointer-events-none'></div>
+
+
+            <div className='relative  max-w-7xl  mx-auto'>
+                <div className='flex  items-center justify-between mb-10'>
+                    <div>
+                        <h1 className='text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
+                            My Documents
+                        </h1>
+
+                        <p className='mt-2 text-sm text-gray-700'>
+                            Manage and organize your learning  materials in one place.
+                        </p>
+                    </div>
+                    {
+                        documents.length > 0 && (
+
+                            <Button onClick={() => setIsUploadModelOpen(true)} >
+
+                                <Plus className='mr-2 h-4 w-4' strokeWidth={2.5} />
+                                Upload Document
+                            </Button>
+                        )
+
+
+                    }
+                </div>
+                {renderContent()}
+
+
+            </div>
+
 
         </div>
     )
