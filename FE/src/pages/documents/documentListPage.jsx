@@ -134,24 +134,42 @@ const DocumentListPage = () => {
 
         if( loading) {
             return (
-                <div>
+                <div className='flex items-center justify-center min-h-[400px]'>
                     <Spinner />
                 </div>
             )
         }
 
-        if (documents.length > 0) {
+        if (documents.length === 0) {
             return (
-                <div className=''>
-                    <div className=''>
-                        <div className=''>
-                            <FileText className='h-6 w-6 text-gray-400' strokeWidth={1.5} />
+                <div className='flex items-center justify-center min-h-[400px]'>
+                    <div className='text-center max-w-md'>
+                        <div className='inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-linear-to-br from-slate-100 to-slate-200 shadow-lg shadow-slate-200/50 mb-4'>
+                            <FileText className='h-10 w-10 text-slate-400' strokeWidth={1.5} />
 
                         </div>
+                        <h3 className='text-xl font-medium text-slate-900 tracking-tight mb-2'>No Documents Available</h3>
+                        <p className='text-sm text-slate-500 mb-6'>Get started by uploading your first document.</p>
+                        <button onClick={() => setIsUploadModelOpen(true)} className='inline-flex  items-center  gap-2 px-6 py-3 bg-linear-to-r  from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-sm  font-semibold rounded-xl  transition-all duration-200 shadow-lg  shadow-emerald-500/25 hover:shadow-emerald-500/30 active:scale-[0.98]  mt-4'>
+                            <Plus className='mr-2 h-4 w-4' strokeWidth={2.5} />
+                            Upload Document
+                        </button>
                     </div>     
                 </div>
             )
         }
+
+        return (
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5'>
+                {documents.map((doc) => (
+                    <DocumentCard
+                        key={doc.id}
+                        document={doc}
+                        onDelete={() => handleDeleteRequest}
+                    />
+                ))}
+            </div>
+        )
 
     }
 
