@@ -275,7 +275,66 @@ const DocumentListPage = () => {
           </div>
         </div>
       )}
+
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4  bg-slate-900/50 backdrop-blur-sm">
+        <div className="relative w-full max-w-md bg-white/95 backdrop-blur-xl border border-slate-200/60 rounded-2xl shadow-slate-900/20 ">
+
+          <button
+            onClick={() => setIsDeleteModelOpen(false)}
+            className="absolute top-6 right-6  w-8 h-8 flex items-center justify-center rounded-lg text-slate-400"
+          >
+            <X className="" strokeWidth={2} />
+             </button>
+
+          <div>
+            <div>
+              <Trash2 className="" strokeWidth={2} />
+            </div>
+            <h2>
+              Confirm Deletion
+            </h2>
+          </div>
+
+          <p className="">
+
+            Are your Sure you want to delete the document:
+
+            <span className="">
+              {selectedDoc?.title}
+            </span>
+
+            ? This action cannot be undone
+
+          </p>
+          <div className="">
+            <button className="" type="button" onClick={() => setIsDeleteModelOpen(false)} disabled={deleting}
+
+            >
+              Cancel
+            </button>
+            <button className=""
+              onClick={handleConfirmDelete}
+              disabled={deleting}
+
+            >
+
+              {
+                deleting ? (
+                  <span>
+                    <div className="" />
+                    Deleting...
+                  </span>
+                )
+                  :
+                  (
+                    "Delete"
+                  )
+              }
+            </button> 
+          </div>
+        </div>
       </div>
+    </div>
   );
 };
 
