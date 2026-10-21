@@ -25,10 +25,14 @@ const DocumentCard = ({ document, OnDelete }) => {
   const handleNavigate = () => {
     navigate(`/documents/${document._id}`);
   };
-
+ 
   const handleDelete = (e) => {
+    console.log("cli");
+    
     e.stopPropagation();
     OnDelete(document._id);
+    console.log("after cli", document);
+
   };
   return (
     <div
