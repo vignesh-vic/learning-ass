@@ -4,7 +4,8 @@ import Spinner from "../../components/common/Spinner"
 import toast from "react-hot-toast"
 import { ArrowLeft, ExternalLink } from "lucide-react"
 import { useEffect, useState } from "react"
-
+import PageHeader from "../../components/common/PageHeader"
+import Tabs from "../../components/common/Tabs"
 
 
 const DocumentDetailPage = () => {
@@ -50,7 +51,7 @@ const DocumentDetailPage = () => {
     
     }
 
-    if(!document || !document.data || document.data.filePath){
+    if(!document){
 
       return <p className="text-center p-8">No document found</p>
     }
@@ -80,7 +81,7 @@ const DocumentDetailPage = () => {
                 <iframe
                 src={pdfUrl}
                 title="Document Viewer"
-                className=''
+                className='w-full h-[70vh] bg-white  rounded border border-gray-300'
                 frameBorder="0"
                 style={{colorScheme:'light'}}
                 />
@@ -110,22 +111,37 @@ const DocumentDetailPage = () => {
   }
 
   const tabs=[
-    {name:'Content',component:renderContent()},
-    {name:'Chat',component:renderChat()},
-    { name: 'AI Actions', component: renderAIActions() },
-    {name:'Flashcards',component:renderFlashcardsTab()},
-    {name:'Quizzes',component:renderQuizzesTab()}
+    {name:'Content',label:renderContent()},
+    {name:'Chat',label:renderChat()},
+    { name: 'AI Actions', label: renderAIActions() },
+    {name:'Flashcards',label:renderFlashcardsTab()},
+    {name:'Quizzes',label:renderQuizzesTab()}
   ]
     
+
   if(loading){
-    return <div>Document not found.</div>
+    return <Spinner/>
+
+  }
+
+  if(!document){
+    return <div className="text-center p-8 ">Document not found.</div>
   }
 
   
+  console.log(document?.data );
 
   return (
-    <div>
-          Document Detail Page
+    <div className="p-4">
+         <div>
+
+          <Link to="/documents" className="inline-flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-blue-800 mb-4">
+            <ArrowLeft size={16}/>
+            Back to Documents
+          </Link>
+         </div>
+         <PageHeader title={document?.data?.title}/>
+         <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab}/> 
     </div>
   )
 }
