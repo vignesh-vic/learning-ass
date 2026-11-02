@@ -1,11 +1,10 @@
-import { error } from 'console'
 import Document from '../models/Document.js'
 import FlashCard from '../models/FlashCard.js'
+import Quiz from '../models/Quiz.js'
 import {extractTextFromPDF} from '../utils/pdfParser.js'
 import {chunkText} from '../utils/textChunker.js'
 import fs from 'fs/promises'
 import mongoose from 'mongoose'
-import { stat } from 'fs'
 
 
 export const  uploadDocument = async (req, res, next)=>{
@@ -26,7 +25,8 @@ export const  uploadDocument = async (req, res, next)=>{
             })
         }
 
-        const baseUrl = `https://localhost:${process.env.PORT || 5000}`
+        const baseUrl = `http://localhost:${process.env.PORT || 5000}`
+        
         const fileUrl = `${baseUrl}/uploads/documents/${req.file.filename}`
 
         const document = await Document.create({
@@ -51,12 +51,9 @@ export const  uploadDocument = async (req, res, next)=>{
 
     } catch (error) {
         if(req.file){
-            await fs.unlink(req.file.path).catch(()=>{
-
-            })
+            await fs.unlink(req.file.path).catch(()=>{})
         }
         next(error)
-        
     }
 }
 
@@ -64,20 +61,17 @@ export const  uploadDocument = async (req, res, next)=>{
 const processPDF = async (documentId, filePath) => {
     try {
         const {text} = await extractTextFromPDF(filePath)
-        const chunks = chunkText(text, 500,50)
+        const chunks = chunkText(text, 500, 50)
    
         await Document.findByIdAndUpdate(documentId, { 
             extractedText: text,
             chunks,
             status: 'ready'
-        
         })
-
 
     } catch (error) {
         console.error('Error processing PDF:', error)
         await Document.findByIdAndUpdate(documentId, { status: 'failed' })
-        
     }
 }
 
@@ -101,33 +95,31 @@ export const getDocuments = async (req, res, next) => {
                     foreignField: 'documentId',
                     as: 'quizzes'    
             }},
-           {
-               $addFields: {
-                flashcardCount:{ $size: '$flashcardSets' },
-                quizCount: { $size: '$quizzes' }
-                
-               }
-           },
-           {
-            $project: {
-                extractedText:0,
-                chunks:0,
-                flashcardSets:0,
-                quizzes:0
+            {
+                $addFields: {
+                    flashcardCount:{ $size: '$flashcardSets' },
+                    quizCount: { $size: '$quizzes' }
+                }
+            },
+            {
+                $project: {
+                    extractedText:0,
+                    chunks:0,
+                    flashcardSets:0,
+                    quizzes:0
+                }
+            },
+            {
+                $sort: { updatedDate: -1 }
             }
-           },
-           {
-            $sort: { updatedDate: -1 }
-           }
         ])  
 
-
-            res.status(200).json({
-                success:true,
-                count:documents.length,
-                data:documents, 
-                statusCode:200,
-            })
+        res.status(200).json({
+            success:true,
+            count:documents.length,
+            data:documents, 
+            statusCode:200,
+        })
 
     } catch (error) {
         next(error);
@@ -139,18 +131,14 @@ export const getDocument = async (req, res, next) => {
     try {
         const document = await Document.findOne({ _id: req.params.id, userId: req.user._id });
         if (!document) {
-            return res.status(404).json({satus:false,  error: 'Document not found' });
+            return res.status(404).json({ success: false, error: 'Document not found' });
         }
 
-        res.json(document);
-        const flashcardCount = await FlashCard.countDocuments({
-            documentId:document._id,
-            userId:req.user._id
-        })
-        const quizCount = await Quiz.countDocuments({
-            documentId:document._id,
-            userId:req.user._id
-        })
+        // Fetch counts and update lastAccessed before responding
+        const [flashcardCount, quizCount] = await Promise.all([
+            FlashCard.countDocuments({ documentId: document._id, userId: req.user._id }),
+            Quiz.countDocuments({ documentId: document._id, userId: req.user._id })
+        ])
 
         document.lastAccessed = new Date()
         await document.save()
@@ -160,9 +148,9 @@ export const getDocument = async (req, res, next) => {
         documentData.quizCount = quizCount
 
         res.status(200).json({
-            success:true,
-            data:documentData,
-            statusCode:200
+            success: true,
+            data: documentData,
+            statusCode: 200
         })
     } catch (error) {
         next(error);
