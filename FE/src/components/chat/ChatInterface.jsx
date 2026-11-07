@@ -75,12 +75,12 @@ const ChatInterface = () => {
   }
 
 
-  if(initialLoading){
+  if (initialLoading) {
     return (
       <div className='flex flex-col  h-[70vh] bg-white/80 backdrop-blue-xl border border-slate-200/60 rounded-2xl  items-center justify-center  shadow-xl  shadow-slate-200/50'>
         <div className='w-14 h-14 rounded-2xl  flex bg-linear-to-br from-emerald-100 to-teal-100 items-center justify-center mb-4 '>
-              <MessageSquare className='w-7 h-7 text-emerald-600' strokeWidth={2}/>
-          </div>
+          <MessageSquare className='w-7 h-7 text-emerald-600' strokeWidth={2} />
+        </div>
         <Spinner />
         <p className='text-sm text-stale-500 mt-3 font-medium'>Loading chat History... </p>
       </div>
@@ -89,8 +89,74 @@ const ChatInterface = () => {
 
 
   return (
-    <div>
-      ChatInterface
+    <div className='flex flex-col h-[70vh] bg-white/80 backdrop-blue-xl border border-slate-200/60 rounded-2xl shadow-xl  shadow-slate-200/50 overflow-hidden'>
+      <div className='flex-1 p-6  overflow-y-hidden bg-linear-to-br  from-slate-50/50 via-white/50 to-slate-50/50'>
+        {
+          history.length === 0 ? (
+            <div className='flex flex-col  items-center  justify-center h-full text-center'>
+
+              <div className='w-14 h-14 rounded-2xl  flex bg-linear-to-br from-emerald-100 to-teal-100 items-center justify-center mb-4 '>
+                <MessageSquare className='w-7 h-7 text-emerald-600' strokeWidth={2} />
+              </div>
+              <h3 className="text-base font-semibold text-slate-900 mb-2">
+                Start a conversation.
+              </h3>
+
+              <p className="text-sm text-slate-500">
+                Ask me anything about the document and I will try to answer your questions based on the content of the document.
+              </p>
+
+            </div>
+          ) :
+            (
+              history.map(renderMessage)
+            )
+
+        }
+        <div ref={messageRef} />
+        {
+          loading && (
+            <div className='flex items-center gap-3 my-4'>
+              <div className='w-8 h-8 rounded-2xl bg-linear-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-500/25  flex items-center justify-center shrink-0'>
+                <Sparkles className='w-4 h-4 text-white' strokeWidth={2} />
+              </div>
+              <div className='flex items-center gap-2 px-4 py-3 rounded-2xl rounded-bl-md  bg-white border  border-slate-200/60  '>
+                <div className='flex-1 gap-1'>
+                  <span className='w-2 h-2 bg-slate-400 rounded-full animate-bounce' style={{ animationDelay: '0s' }}></span>
+                  <span className='w-2 h-2 bg-slate-400 rounded-full animate-bounce' style={{ animationDelay: '150s' }}></span>
+                  <span className='w-2 h-2 bg-slate-400 rounded-full animate-bounce' style={{ animationDelay: '300s' }}></span>
+                </div>
+              </div>
+            </div>
+          )
+        }
+      </div>
+      {/* input area for sending message */}
+
+<div className='p-5 border-t border-slate-200/60 bg-white/80'>
+
+
+  <form onSubmit={handleSendMessage} className='flex items-center gap-3 p-4 border-t border-slate-200/60 bg-white'>
+    <input
+      type="text"
+
+      value={messgae}
+      onChange={(e) => setMessage(e.target.value)}
+      placeholder="Ask follow-up questions about the document..."
+      className="flex-1 px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+      disabled={loading}
+    />
+    <button
+      type="submit"
+      className="flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+      disabled={loading || !messgae.trim()}
+    > 
+      <Send className="w-4 h-4" strokeWidth={2}/>
+    </button>
+  </form> 
+</div>
+
+
     </div>
   )
 }
