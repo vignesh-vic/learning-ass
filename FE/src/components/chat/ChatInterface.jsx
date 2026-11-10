@@ -148,10 +148,10 @@ const ChatInterface = () => {
     />
     <button
       type="submit"
-      className="flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+      className="shrink-0 w-12 h-12 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white transition-all duration-200 shadow-lg shadow-emerald-500/25 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
       disabled={loading || !messgae.trim()}
     > 
-      <Send className="w-4 h-4" strokeWidth={2}/>
+      <Send className="w-5 h-5" strokeWidth={2}/>
     </button>
   </form> 
 </div>
