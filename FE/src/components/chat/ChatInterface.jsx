@@ -2,14 +2,14 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { Send, MessageSquare, Sparkles } from 'lucide-react'
 import { useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import aiService from '../../services/aiServices'
-// import { useAuth } from '../../context/authContext'
 import Spinner from '../common/Spinner'
 import MarkdownRenderer from '../common/MarkdownRenderer'
 
 const ChatInterface = () => {
   const { id: documentId } = useParams()
-  // const { user } = useAuth()
+  const user = useSelector((state) => state.auth.user)
   const [history, setHistory] = useState([])
   const [messgae, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
@@ -71,7 +71,32 @@ const ChatInterface = () => {
   }
 
   const renderMessage = (message, index) => {
-    return
+    const isUser = message.role === 'user'
+    return (
+      <div key={index} className={`flex items-start gap-3 my-4  ${isUser ? 'justify-end' : ''} `}>
+          {!isUser && (
+            <div className='w-9 h-9 rounded-2xl shadow-sm '>
+              <Sparkles className='' strokeWidth={2} />
+              </div>
+          )}
+        <div className={`max-w-lg p-4 rounded-2xl shadow-sm  ${isUser ? 'bg-linear-to-br from-emerald-500 to-teal-500 text-white rounded-br-md ' : 'bg-white border border-slate-200/60 text-slate-800 rounded-bl-md '}`}>
+            {isUser?(
+          <p>
+            {message.content}
+          </p>  
+          ):( 
+            <MarkdownRenderer content={message.content}/>
+          )
+            
+            }
+          </div>
+          {isUser && (
+            <div className='w-9 h-9 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white font-semibold text-sm shadow-sm shrink-0'>
+              {user?.name?.charAt(0).toUpperCase() || 'U'}
+            </div>
+          )}
+      </div>
+    )
   }
 
 

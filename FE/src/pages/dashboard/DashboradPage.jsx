@@ -100,7 +100,6 @@ const DashboradPage = () => {
         </div>
         <div className='grid grid-cols-1 md:grid-cols-3  gap-6 mb-5'>
           {stats.map((stat, index) => (
-         <>
               <div key={index} className={`group p-4 rounded-xl bg-white shadow-md transition-transform duration-300 hover:scale-105`}>
                 <div className='flex items-center gap-4 justify-between '>
                   <span className='text-sm text-slate-500 uppercase tracking-wide'>
@@ -114,7 +113,6 @@ const DashboradPage = () => {
                   {stat.value}
                 </div>
               </div>
-         </>
           ))}
         </div>
         <div className='bg-white rounded-2xl shadow-xl p-4  border border-slate-200/60   '>
