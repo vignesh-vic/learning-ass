@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import PageHeader from "../../components/common/PageHeader"
 import Tabs from "../../components/common/Tabs"
 import ChatInterface from "../../components/chat/ChatInterface"
+import AiActions from "../../components/ai/AiActions"
 
 
 const DocumentDetailPage = () => {
@@ -84,7 +85,7 @@ const DocumentDetailPage = () => {
   }
 
   const renderAIActions = () => {
-    return "renderActions"
+    return <AiActions/>
   }
 
   const renderFlashcardsTab = () => {

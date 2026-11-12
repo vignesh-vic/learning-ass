@@ -75,17 +75,20 @@ const ChatInterface = () => {
     return (
       <div key={index} className={`flex items-start gap-3 my-4  ${isUser ? 'justify-end' : ''} `}>
           {!isUser && (
-            <div className='w-9 h-9 rounded-2xl shadow-sm '>
-              <Sparkles className='' strokeWidth={2} />
+            <div className='w-9 h-9 rounded-xl bg-linear-to-br from-emerald-400 to-teal-500  shadow-lg shadow-emerald-500/25  flex items-center justify-center shrink-0'>
+              <Sparkles className=' w-4 h-4 text-white' strokeWidth={2} />
               </div>
           )}
         <div className={`max-w-lg p-4 rounded-2xl shadow-sm  ${isUser ? 'bg-linear-to-br from-emerald-500 to-teal-500 text-white rounded-br-md ' : 'bg-white border border-slate-200/60 text-slate-800 rounded-bl-md '}`}>
             {isUser?(
-          <p>
+          <p className='text-sm leading-relaxed'>
             {message.content}
           </p>  
           ):( 
-            <MarkdownRenderer content={message.content}/>
+            <div className='prose prose-sm max-w-none prose-slate'>
+                <MarkdownRenderer content={message.content} />
+
+              </div>
           )
             
             }
@@ -146,10 +149,10 @@ const ChatInterface = () => {
                 <Sparkles className='w-4 h-4 text-white' strokeWidth={2} />
               </div>
               <div className='flex items-center gap-2 px-4 py-3 rounded-2xl rounded-bl-md  bg-white border  border-slate-200/60  '>
-                <div className='flex-1 gap-1'>
+                <div className='flex items-center gap-1'>
                   <span className='w-2 h-2 bg-slate-400 rounded-full animate-bounce' style={{ animationDelay: '0s' }}></span>
-                  <span className='w-2 h-2 bg-slate-400 rounded-full animate-bounce' style={{ animationDelay: '150s' }}></span>
-                  <span className='w-2 h-2 bg-slate-400 rounded-full animate-bounce' style={{ animationDelay: '300s' }}></span>
+                  <span className='w-2 h-2 bg-slate-400 rounded-full animate-bounce' style={{ animationDelay: '0.15s' }}></span>
+                  <span className='w-2 h-2 bg-slate-400 rounded-full animate-bounce' style={{ animationDelay: '0.3s' }}></span>
                 </div>
               </div>
             </div>
