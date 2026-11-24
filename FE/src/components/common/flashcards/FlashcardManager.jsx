@@ -120,7 +120,7 @@ const FlashcardManager = ({ documentId }) => {
       )
 
     }
-    if (flashcardSets.length === 0) {
+    if (flashcardSets.length !== 0) {
 
 
 
@@ -158,19 +158,19 @@ const FlashcardManager = ({ documentId }) => {
       )
     }
 
-    return <div>
+    return <div className="space-y-6">
 
-          <div>
-            <h3>
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold text-slate-900">
               Your Flashcard Sets
             </h3>
-            <p>
+            <p className="text-sm text-slate-500 mt-1">
               {flashcardSets.length}
               {flashcardSets.length ===1 ? "set":"sets"} available
 
             </p>
           </div>
-          <button onClick={handleGenerateFlashcards} disabled={generating} className="">
+          <button onClick={handleGenerateFlashcards} disabled={generating} className="group inline-flex items-center gap-2 px-5 h-11 bg-linear-to-r  from-emerald-500 to-teal-500  hover:from-emerald-600 hover:to-teal-600 text-white font-semibold text-sm rounded-xl transition-all duration-200 shadow-lg shadow-emerald-500/25 active:scale-90 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100">
             {generating ? <>
             <div/>
               Generating...
