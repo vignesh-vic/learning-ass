@@ -30,6 +30,8 @@ const FlashcardManager = ({ documentId }) => {
   const [isDeleteModelOpen, setIsDeleteModelOpen] = useState(false);
   const [setToDelete, setSetToDelete] = useState(null);
 
+  const [deleting,setDeleting]=useState(false)
+
   const fetchFlashcardSets = async () => {
     try {
       const response =
@@ -98,7 +100,13 @@ const FlashcardManager = ({ documentId }) => {
   }
 
   const handleConfirmDelete = async () => {
-
+    if (!setToDelete) return;
+    setDeleting(true)
+    try {
+      await flascardService.deleteFlashcardSet(setToDelete._id)
+    } catch (error) {
+      
+    }
   }
 
 
@@ -194,7 +202,7 @@ const FlashcardManager = ({ documentId }) => {
             className="group relative bg-white/80 backdrop-blur-xl  border-2 border-slate-200  hover:border-emerald-300 rounded-2xl p-6 cursor-pointer transition-all duration-200 hover:shadow-lg hover:shadow-emerald-500/10"
           >
 
-            <button onClick={() => handleDeleteRequest(e, set)}
+            <button onClick={(e) => handleDeleteRequest(e, set)}
               className="absolute top-4 right-4 p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-all duration-200 opacity-0 group-hover:opacity-100"
             >
               <Trash2 strokeWidth={2} className="w-4 h-4" />
@@ -245,11 +253,47 @@ const FlashcardManager = ({ documentId }) => {
 
         isOpen={isDeleteModelOpen}
         onClose={() => setIsDeleteModelOpen(false)}
-        title="Delete Flashcard set"
+        title="Delete Flashcard Set"
 
       >
-        <div>
+        <div className="spac-y-6">
+          <p className="text-slate-600">
+            Are you sure you want to delete this flashcard set? This action cannot be undo and all cards will be permanently removed.
+          </p>
+          <div className="flex items-center justify-end gap-3 pt-3">
+            <button
+            type="button"
+            onClick={()=>setIsDeleteModelOpen(false)
 
+
+            }
+
+            className="px-5 h-11 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-sm rounded-xl transition-all duration-200  disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={deleting}
+              >
+                Cancel
+            </button>
+            <button 
+              onClick={handleConfirmDelete}
+              disabled={deleting}
+
+              className="px-5 h-11 bg-linear-to-r from-rose-500 to-red-500 hover:from-rose-600  hover:to-red-500 text-white font-semibold text-xs rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+
+            >
+              {
+                deleting ? 
+
+                <span className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"/>
+                  Deleting...
+                </span>:
+                (
+                  "Delete Set"
+                )
+              }
+
+            </button>
+          </div>
         </div>
       </Model>
     </>
